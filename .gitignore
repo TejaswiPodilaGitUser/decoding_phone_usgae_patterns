@@ -1,0 +1,33 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+venv/
+.env
+
+# Ignore data files (except sample dataset)
+data/*.csv
+!data/phone_usage_india.csv
+
+# Ignore models
+models/*.pkl
+
+# Ignore logs and MLflow tracking files
+logs/
+mlruns/
+
+# Ignore Jupyter Notebook checkpoints
+notebooks/.ipynb_checkpoints/
+
+# Ignore Streamlit cache
+.streamlit/
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
