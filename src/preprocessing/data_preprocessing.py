@@ -1,10 +1,9 @@
 import pandas as pd
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 
 # Load your dataset
-data = pd.read_csv('data/phone_usage_india.csv')
+data = pd.read_csv('data/raw/phone_usage_india.csv')
 
 # Function for handling missing values based on the discussed strategy
 def handle_missing_values(df):
@@ -13,9 +12,9 @@ def handle_missing_values(df):
         # Predictive imputation (Linear Regression based on other features like Gender, Location)
         regressor = LinearRegression()
         features = ['Gender', 'Location']  # example features, adjust based on the actual data
-        df = df[features + ['Age']].dropna()  # Drop rows where 'Age' is not missing
-        X = df[features]
-        y = df['Age']
+        df_temp = df[features + ['Age']].dropna()  # Drop rows where 'Age' is not missing
+        X = df_temp[features]
+        y = df_temp['Age']
         regressor.fit(X, y)
         missing_data = df[df['Age'].isnull()]
         predicted_age = regressor.predict(missing_data[features])
@@ -27,7 +26,6 @@ def handle_missing_values(df):
 
     # Handling 'Gender' (Categorical - Mode or Based on other features)
     if df['Gender'].isnull().sum() > 0:
-        # Impute based on location, if applicable
         df['Gender'] = df.groupby('Location')['Gender'].transform(lambda x: x.fillna(x.mode()[0]))
 
     # Handling 'Location' (Categorical - Impute based on Region or Mode)
@@ -65,7 +63,6 @@ def handle_missing_values(df):
 
     # Handling 'E-commerce Spend' (Numerical - Zero or Predictive Imputation)
     if df['E-commerce Spend (INR/month)'].isnull().sum() > 0:
-        # We will assume missing values mean no spending, so fill with 0
         df['E-commerce Spend (INR/month)'] = df['E-commerce Spend (INR/month)'].fillna(0)
 
     # Handling 'Streaming Time' (Numerical - Mean Imputation)
@@ -84,10 +81,7 @@ def handle_missing_values(df):
 
     # Handling 'Primary Use' (Categorical - Predictive Imputation or Based on Related Features)
     if df['Primary Use'].isnull().sum() > 0:
-        # Predictive Imputation can be done if there are patterns based on other features
-        # For simplicity, we fill it with mode or based on 'Phone Brand'
         df['Primary Use'] = df.groupby('Phone Brand')['Primary Use'].transform(lambda x: x.fillna(x.mode()[0]))
-        # If still missing, use mode
         df['Primary Use'] = df['Primary Use'].fillna(df['Primary Use'].mode()[0])
 
     return df
@@ -96,6 +90,6 @@ def handle_missing_values(df):
 cleaned_data = handle_missing_values(data)
 
 # Save the cleaned data
-cleaned_data.to_csv('data/cleaned_phone_usage_india.csv', index=False)
+cleaned_data.to_csv('data/cleaned/cleaned_phone_usage_india.csv', index=False)
 
 print("Missing values handled successfully!")

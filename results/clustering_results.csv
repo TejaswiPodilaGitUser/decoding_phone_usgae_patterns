@@ -1,0 +1,6 @@
+,Labels,Silhouette Score
+KMeans,[1 2 1 ... 1 2 1],0.10337433679918315
+Hierarchical Clustering,[0 0 0 ... 0 2 0],0.08106525161330176
+DBSCAN,[-1 -1 -1 ... -1 -1 -1],-1.0
+Gaussian Mixture Models,[1 1 1 ... 1 1 1],0.04528620149263009
+Spectral Clustering,[0 0 0 ... 0 0 0],0.14514099625084606
