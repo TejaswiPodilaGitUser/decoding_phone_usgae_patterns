@@ -2,11 +2,17 @@ import pandas as pd
 from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.linear_model import LinearRegression
 
+
+#  Data Preprocessing: Handling Missing Values
+
 # Load your dataset
 data = pd.read_csv('data/raw/phone_usage_india.csv')
 
 # Function for handling missing values based on the discussed strategy
 def handle_missing_values(df):
+    # Create a dictionary to store missing values count before and after imputation
+    missing_before = df.isnull().sum()
+
     # Handling 'Age' (Numerical - Predictive Imputation or Mean)
     if df['Age'].isnull().sum() > 0:
         # Predictive imputation (Linear Regression based on other features like Gender, Location)
@@ -84,6 +90,15 @@ def handle_missing_values(df):
         df['Primary Use'] = df.groupby('Phone Brand')['Primary Use'].transform(lambda x: x.fillna(x.mode()[0]))
         df['Primary Use'] = df['Primary Use'].fillna(df['Primary Use'].mode()[0])
 
+    # Create a dictionary to store missing values count after imputation
+    missing_after = df.isnull().sum()
+
+    # Print how many missing values were handled
+    for column in df.columns:
+        handled = missing_before[column] - missing_after[column]
+        if handled > 0:
+            print(f"{handled} missing values handled in '{column}'")
+
     return df
 
 # Apply the function to the data
@@ -92,4 +107,6 @@ cleaned_data = handle_missing_values(data)
 # Save the cleaned data
 cleaned_data.to_csv('data/cleaned/cleaned_phone_usage_india.csv', index=False)
 
+
+# There are no missing values in the  data as per my analysis
 print("Missing values handled successfully!")

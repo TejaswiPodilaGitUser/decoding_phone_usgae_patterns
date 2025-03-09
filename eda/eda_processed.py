@@ -5,7 +5,7 @@ import pandas as pd
 import plots  # Importing the plotting functions from plots.py
 
 # Load the processed dataset
-df = pd.read_csv('data/cleaned/cleaned_standardized_phone_usage.csv')
+df = pd.read_csv('data/processed/feature_engineered_data.csv')
 
 # Streamlit UI setup
 st.set_page_config(page_title='Mobile Usage Patterns EDA', layout='wide')

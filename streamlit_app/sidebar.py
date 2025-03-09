@@ -1,26 +1,34 @@
 import streamlit as st
+import pandas as pd
+
+@st.cache_data
+def load_data():
+    return pd.read_csv("data/cleaned/cleaned_standardized_phone_usage.csv")
 
 def show_sidebar():
+    # Load dataset to get unique values for dropdowns
+    data = load_data()
+    
     # Sidebar for feature selection
     st.sidebar.title("🔍 User Input Features")
     
-    # Sidebar input fields for each column
-    age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
-    gender = st.sidebar.selectbox("Gender", ["Male", "Female", "Other"])
-    location = st.sidebar.selectbox("Location", ["Mumbai", "Delhi", "Pune", "Ahmedabad"])
-    phone_brand = st.sidebar.selectbox("Phone Brand", ["Vivo", "Realme", "Nokia", "Samsung", "Xiaomi"])
-    os = st.sidebar.selectbox("OS", ["Android", "iOS"])
-    screen_time = st.sidebar.slider("Screen Time (hrs/day)", 0.0, 24.0, 3.0)
-    data_usage = st.sidebar.slider("Data Usage (GB/month)", 0.0, 100.0, 5.0)
-    calls_duration = st.sidebar.slider("Calls Duration (mins/day)", 0, 500, 30)
-    num_apps_installed = st.sidebar.slider("Number of Apps Installed", 0, 100, 20)
-    social_media_time = st.sidebar.slider("Social Media Time (hrs/day)", 0.0, 10.0, 1.0)
-    ecommerce_spend = st.sidebar.slider("E-commerce Spend (INR/month)", 0, 5000, 1000)
-    streaming_time = st.sidebar.slider("Streaming Time (hrs/day)", 0.0, 10.0, 1.0)
-    gaming_time = st.sidebar.slider("Gaming Time (hrs/day)", 0.0, 10.0, 1.0)
-    monthly_recharge_cost = st.sidebar.slider("Monthly Recharge Cost (INR)", 0, 1000, 300)
-    battery_consumption = st.sidebar.slider("Battery Consumption (mAh/day)", 0, 5000, 2000)
-
+    # Sidebar input fields with dynamic dropdown values
+    age = st.sidebar.number_input("Age", min_value=int(data["Age"].min()), max_value=int(data["Age"].max()), value=30)
+    gender = st.sidebar.selectbox("Gender", data["Gender"].unique())
+    location = st.sidebar.selectbox("Location", data["Location"].unique())
+    phone_brand = st.sidebar.selectbox("Phone Brand", data["Phone Brand"].unique())
+    os = st.sidebar.selectbox("OS", data["OS"].unique())
+    screen_time = st.sidebar.slider("Screen Time (hrs/day)", float(data["Screen Time (hrs/day)"].min()), float(data["Screen Time (hrs/day)"].max()), 3.0)
+    data_usage = st.sidebar.slider("Data Usage (GB/month)", float(data["Data Usage (GB/month)"].min()), float(data["Data Usage (GB/month)"].max()), 5.0)
+    calls_duration = st.sidebar.slider("Calls Duration (mins/day)", int(data["Calls Duration (mins/day)"].min()), int(data["Calls Duration (mins/day)"].max()), 30)
+    num_apps_installed = st.sidebar.slider("Number of Apps Installed", int(data["Number of Apps Installed"].min()), int(data["Number of Apps Installed"].max()), 20)
+    social_media_time = st.sidebar.slider("Social Media Time (hrs/day)", float(data["Social Media Time (hrs/day)"].min()), float(data["Social Media Time (hrs/day)"].max()), 1.0)
+    ecommerce_spend = st.sidebar.slider("E-commerce Spend (INR/month)", int(data["E-commerce Spend (INR/month)"].min()), int(data["E-commerce Spend (INR/month)"].max()), 1000)
+    streaming_time = st.sidebar.slider("Streaming Time (hrs/day)", float(data["Streaming Time (hrs/day)"].min()), float(data["Streaming Time (hrs/day)"].max()), 1.0)
+    gaming_time = st.sidebar.slider("Gaming Time (hrs/day)", float(data["Gaming Time (hrs/day)"].min()), float(data["Gaming Time (hrs/day)"].max()), 1.0)
+    monthly_recharge_cost = st.sidebar.slider("Monthly Recharge Cost (INR)", int(data["Monthly Recharge Cost (INR)"].min()), int(data["Monthly Recharge Cost (INR)"].max()), 300)
+    battery_consumption = st.sidebar.slider("Battery Consumption (mAh/day)", int(data["Battery Consumption (mAh/day)"].min()), int(data["Battery Consumption (mAh/day)"].max()), 2000)
+    
     # Create a dictionary of all the selected features
     features = {
         "Age": age,
@@ -39,9 +47,9 @@ def show_sidebar():
         "Monthly Recharge Cost (INR)": monthly_recharge_cost,
         "Battery Consumption (mAh/day)": battery_consumption
     }
-
+    
     # Prediction Button in Sidebar
     if st.sidebar.button("⚡ Predict Primary Use"):
         st.session_state["predict"] = True  # Store state to trigger prediction
-
+    
     return features
