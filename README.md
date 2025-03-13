@@ -3,6 +3,8 @@
 ## Project Overview
 This project aims to analyze mobile phone usage patterns in India through data preprocessing, feature engineering, machine learning classification, and clustering techniques. The results are visualized in a Streamlit app.
 
+<img width="831" alt="image" src="https://github.com/user-attachments/assets/48d17e0c-f14f-4968-b4ac-c2fabc41b46b" />
+
 <img width="730" alt="image" src="https://github.com/user-attachments/assets/58357b14-c10d-4d36-a864-3f9517f723e9" />
 
 <img width="868" alt="image" src="https://github.com/user-attachments/assets/8a72e94f-9260-4038-8c57-320e381f3fc0" />
