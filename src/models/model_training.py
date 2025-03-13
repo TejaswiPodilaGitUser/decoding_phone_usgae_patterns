@@ -4,6 +4,7 @@ import os
 import joblib
 import mlflow
 import mlflow.sklearn
+from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -19,18 +20,22 @@ from sklearn.metrics import classification_report, accuracy_score
 os.makedirs('models', exist_ok=True)
 os.makedirs('results', exist_ok=True)
 
-# Set experiment name
+# Set MLflow experiment
 mlflow.set_experiment('Phone_Usage_Pattern_Classification')
 
-# Load the cleaned dataset
+# Load dataset
 df = pd.read_csv('data/processed/feature_engineered_data.csv')
 
-# Split data into features and target
+# Define features and target
 X = df.drop(columns=['Primary Use'])  # Features
 y = df['Primary Use']  # Target
 
+# Apply SMOTE for data balancing
+smote = SMOTE(random_state=42)
+X_resampled, y_resampled = smote.fit_resample(X, y)
+
 # Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
 
 # Standardize features
 scaler = StandardScaler()
@@ -63,16 +68,18 @@ def train_and_evaluate(models, X_train, X_test, y_train, y_test):
             
             accuracy = accuracy_score(y_test, y_pred)
             report = classification_report(y_test, y_pred, output_dict=True)
-            precision = report['accuracy']
+            precision = report['macro avg']['precision']  # Fixed precision calculation
             recall = report['macro avg']['recall']
             f1_score = report['macro avg']['f1-score']
             
+            # Log metrics
             mlflow.log_param("Model", model_name)
             mlflow.log_metric("Accuracy", accuracy)
             mlflow.log_metric("Precision", precision)
             mlflow.log_metric("Recall", recall)
             mlflow.log_metric("F1 Score", f1_score)
             
+            # Log model with an input example
             input_example = np.array(X_train[:1])
             mlflow.sklearn.log_model(model, model_name, input_example=input_example)
             

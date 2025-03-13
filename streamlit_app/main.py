@@ -12,6 +12,10 @@ def load_data():
 def load_model():
     return joblib.load("models/best_classification_model.pkl")
 
+@st.cache_data
+def load_model_results():
+    return pd.read_csv("results/model_comparison_results.csv")
+
 def preprocess_input(input_data):
     """Convert categorical features to numeric encoding"""
     categorical_cols = ["Gender", "Location", "Phone Brand", "OS"]
@@ -51,8 +55,14 @@ def main():
     data = load_data()
 
     st.write("### 📊 Data Preview")
-    st.dataframe(data.head())
+    st.dataframe(data.head())  # Show first few rows
 
+    # Load model comparison results
+    st.write("### 📈 Model Performance Comparison")
+    model_results = load_model_results()
+    st.dataframe(model_results)
+
+    # Display visualizations
     display_all_plots(data)
 
 if __name__ == "__main__":
