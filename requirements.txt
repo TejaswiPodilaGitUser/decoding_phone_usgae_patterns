@@ -18,3 +18,4 @@ hyperopt
 tune-sklearn
 pydantic
 scikit-optimize
+shap

@@ -29,9 +29,11 @@ X_scaled = scaler.fit_transform(X)
 # Split the data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
-# Apply SMOTE to handle class imbalance
+# Ensure X_train is 2D before applying SMOTE
+print("Shape before SMOTE:", X_train.shape)
 smote = SMOTE(random_state=42)
 X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+print("Shape after SMOTE:", X_train_resampled.shape)
 
 # Define parameter grids for RandomizedSearchCV
 param_grids = {

@@ -1,12 +1,8 @@
-# main.py
 import streamlit as st
 import pandas as pd
 import joblib
 from plots_main import display_all_plots
 from sidebar import show_sidebar
-
-# Set Streamlit page configuration for wide layout
-st.set_page_config(layout="wide")
 
 @st.cache_data
 def load_data():
@@ -25,39 +21,39 @@ def preprocess_input(input_data):
     
     return input_data
 
-# Define reverse mapping from numbers to category names
 primary_use_mapping = {0: "Education", 1: "Gaming", 2: "Entertainment", 3: "Social Media", 4: "Work"}
 
 def main():
     st.title("📱 Phone Usage Prediction & Analysis")
 
-    # Sidebar Input
-    st.write("## 🔮 Prediction")
-    user_input = show_sidebar()
-    
-    # Convert user input to DataFrame
-    input_df = pd.DataFrame([user_input])
+    # Hide sidebar if active tab is not "Main"
+    if "active_tab" in st.session_state and st.session_state["active_tab"] != "Main":
+        st.markdown("""
+            <style>
+            [data-testid="stSidebar"] {display: none;}
+            </style>
+            """, unsafe_allow_html=True)
+    else:
+        user_input = show_sidebar()  # Sidebar only in "Main"
 
-    # Encode categorical variables
-    input_df = preprocess_input(input_df)
+        st.write("## 🔮 Prediction")
+        input_df = pd.DataFrame([user_input])
+        input_df = preprocess_input(input_df)
 
-    # Check if Predict button was clicked
-    if "predict" in st.session_state and st.session_state["predict"]:
-        model = load_model()
-        prediction = model.predict(input_df)[0]  # Get predicted class (number)
-        predicted_category = primary_use_mapping.get(prediction, "Unknown")  # Get category name
-        
-        st.success(f"📌 **Predicted Primary Use:** {predicted_category}")
-        st.session_state["predict"] = False  # Reset state
+        if "predict" in st.session_state and st.session_state["predict"]:
+            model = load_model()
+            prediction = model.predict(input_df)[0]
+            predicted_category = primary_use_mapping.get(prediction, "Unknown")
+            st.success(f"📌 **Predicted Primary Use:** {predicted_category}")
+            st.session_state["predict"] = False
 
     # Load data
     data = load_data()
 
-
     st.write("### 📊 Data Preview")
-    st.dataframe(data.head())  # Display first 5 rows of the data
+    st.dataframe(data.head())
 
-    display_all_plots(data)  # Display all plots
+    display_all_plots(data)
 
 if __name__ == "__main__":
     main()

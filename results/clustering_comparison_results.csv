@@ -1,6 +1,6 @@
-Model,Silhouette Score,Davies-Bouldin Score,Calinski-Harabasz Score,Number of Clusters,Cluster Sizes
-KMeans,0.08011142868641775,2.920176025859295,1388.123862106367,4,"[np.int64(1775), np.int64(6684), np.int64(4811), np.int64(4416)]"
-Hierarchical Clustering,0.08202509707449925,2.805103861967695,1092.419562125396,4,"[np.int64(10279), np.int64(1775), np.int64(4143), np.int64(1489)]"
-DBSCAN,-1.0,-1.0,-1.0,0,[]
-Gaussian Mixture Models,0.06101854266976142,3.2891129535345005,1184.971023711595,4,"[np.int64(6701), np.int64(1775), np.int64(2581), np.int64(6629)]"
-Spectral Clustering,0.1003886646086871,1.627430298068758,442.4135709374439,4,"[np.int64(15911), np.int64(2), np.int64(1771), np.int64(2)]"
+Model,Silhouette Score,Davies-Bouldin Score,Calinski-Harabasz Score
+KMeans,0.0742,2.836,1207.5153
+Hierarchical Clustering,0.0588,2.9689,905.12
+DBSCAN,-1.0,-1.0,-1.0
+Gaussian Mixture,0.0521,3.6878,1043.1105
+Spectral Clustering,0.0892,1.4732,326.7417

@@ -16,8 +16,21 @@ def show_sidebar():
     age = st.sidebar.number_input("Age", min_value=int(data["Age"].min()), max_value=int(data["Age"].max()), value=30)
     gender = st.sidebar.selectbox("Gender", data["Gender"].unique())
     location = st.sidebar.selectbox("Location", data["Location"].unique())
-    phone_brand = st.sidebar.selectbox("Phone Brand", data["Phone Brand"].unique())
-    os = st.sidebar.selectbox("OS", data["OS"].unique())
+    
+    # Filtering Phone Brand and OS dropdowns dynamically
+    phone_brands = data["Phone Brand"].unique()
+    os_options = data["OS"].unique()
+    
+    phone_brand = st.sidebar.selectbox("Phone Brand", phone_brands)
+    
+    if phone_brand.lower() == "apple":
+        os = st.sidebar.selectbox("OS", ["iOS"])
+    else:
+        os = st.sidebar.selectbox("OS", [o for o in os_options if o.lower() != "ios"])  # Exclude iOS for non-Apple brands
+    
+    if os.lower() == "ios":
+        phone_brand = st.sidebar.selectbox("Phone Brand", ["Apple"])  # Lock to Apple if iOS is selected
+    
     screen_time = st.sidebar.slider("Screen Time (hrs/day)", float(data["Screen Time (hrs/day)"].min()), float(data["Screen Time (hrs/day)"].max()), 3.0)
     data_usage = st.sidebar.slider("Data Usage (GB/month)", float(data["Data Usage (GB/month)"].min()), float(data["Data Usage (GB/month)"].max()), 5.0)
     calls_duration = st.sidebar.slider("Calls Duration (mins/day)", int(data["Calls Duration (mins/day)"].min()), int(data["Calls Duration (mins/day)"].max()), 30)
