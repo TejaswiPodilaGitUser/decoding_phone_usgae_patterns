@@ -5,7 +5,7 @@ This project aims to analyze mobile phone usage patterns in India through data p
 
 Raw data- Data is unifromly distributed
 
-<img width="831" alt="image" src="https://github.com/user-attachments/assets/48d17e0c-f14f-4968-b4ac-c2fabc41b46b" />
+<img width="827" alt="image" src="https://github.com/user-attachments/assets/4bd2e9e7-a97b-4be2-8c88-a3c952f08c77" />
 
 After preprocessing and feature engineering data is normally distributed
 
