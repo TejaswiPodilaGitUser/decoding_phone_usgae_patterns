@@ -19,3 +19,6 @@ tune-sklearn
 pydantic
 scikit-optimize
 shap
+tensorflow
+keras
+torch
